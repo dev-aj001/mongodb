@@ -1,21 +1,10 @@
-const bcrypt = require("bcryptjs");
+const mongoose = require('mongoose');
 
-let users = [
-  {
-    username: "user 1",
-    password: bcrypt.hashSync("12345", 10), // Contraseña encriptada
-  },
-  {
-    username: "user 2",
-    password: bcrypt.hashSync("password", 10), // Contraseña encriptada
-  },
-];
+const usuarioSchema = new mongoose.Schema({
+  username: { type: String, required: true },
+  password: { type: String, required: true }
+});
 
+const Usuario = mongoose.model('Usuario', usuarioSchema);
 
-function getUserByUsername(username) {
-  return users.find((user) => user.username === username);
-}
-
-module.exports = {
-  getUserByUsername
-}
+module.exports = Usuario;

@@ -3,11 +3,11 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const JWT_SECRET = "claveSecreta";
-const JWT_EXPIRES_IN = "60s";
+const JWT_EXPIRES_IN = "60m";
 
 async function login(req, res) {
   const { username, password } = req.body;
-  const user = userModel.getUserByUsername(username);
+  const user = await userModel.findOne({username});
   if (!user)
     return res
       .status(403)
@@ -30,4 +30,30 @@ async function login(req, res) {
   });
 }
 
-module.exports = { login, JWT_SECRET };
+async function register(req, res) {
+  const { username, password } = req.body;
+  const user = await userModel.findOne({username});
+
+  console.log(user);
+
+  if(user){
+    return res
+      .status(403)
+      .json({ code: 403, message: "Este usuario ya existe" });
+  }
+
+  const cryptpass = bcrypt.hashSync(password, 10);
+
+  const nuevoUsuario = new userModel({
+    username: username, 
+    password: cryptpass
+  });
+  console.log(nuevoUsuario);
+
+  await nuevoUsuario.save();
+  return res
+      .status(403)
+      .json({ code: 403, message: "Registrado exitosamente" });
+}
+
+module.exports = { login, JWT_SECRET, register };
