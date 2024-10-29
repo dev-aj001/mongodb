@@ -2,15 +2,30 @@ const request = require('supertest');
 const chai = require('chai');
 const sinon = require('sinon');
 
-const app = require('../index');
+const app = require('./app');
+const dotenv = require('dotenv');
+const connectDB = require('../config/database.config');
+
+const app = require('../app');
 
 const expect = chai.expect;
 let token;
 let taskID;
 
+
+
+
 //Pruebas para firebases 
 // Como primer paso nos autenticamos para poder realizar la consulta
     before(async () => {
+
+            dotenv.config();
+    PORT = process.env.PORT;
+
+    connectDB();
+
+
+
         const res = await request(app).post('/auth/login').send({ username: 'admin', password: '12345' });
         token = res.body.token;
         expect(token).to.be.a('string');
@@ -25,7 +40,6 @@ describe('GET ALL TASKS /tareas', () => {
         expect(res.body).to.be.an('array');
     });
 });
-
 
 // Crear nueva tarea
 describe('CREATE NEW TASK /tareas', () => {

@@ -48,7 +48,6 @@ async function register(req, res) {
     username: username, 
     password: cryptpass
   });
-  console.log(nuevoUsuario);
 
   await nuevoUsuario.save();
   return res
