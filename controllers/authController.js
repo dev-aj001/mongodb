@@ -51,8 +51,8 @@ async function register(req, res) {
 
   await nuevoUsuario.save();
   return res
-      .status(403)
-      .json({ code: 403, message: "Registrado exitosamente" });
+      .status(200)
+      .json({ code: 200, message: "Registrado exitosamente" });
 }
 
 module.exports = { login, JWT_SECRET, register };
